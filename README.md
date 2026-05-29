@@ -1,86 +1,70 @@
-# openconstruct-jupyter
+# openconstruct-jupyter — Jupyter Integration for OpenConstruct
 
-> Connect OpenConstruct to your Jupyter notebooks in one line.
+Connect OpenConstruct to your Jupyter notebooks in one line. Cell magic, widgets, fleet panels, and DataFrame-to-room conversion.
 
-## Install
+**Part of [SuperInstance OpenConstruct](https://github.com/SuperInstance/OpenConstruct).**
 
-```bash
-pip install openconstruct-jupyter
-```
+## What This Gives You
 
-## Quickstart
+- **Cell magic** — `%%openconstruct --sense vision` captures output as a sense shadow
+- **DataFrame → Plato room** — turn any pandas DataFrame into a knowledge graph
+- **Python function → agent tool** — `oc.from_function(greet, name="my_tool")`
+- **Fleet panel** — inline widget showing discovered fleet nodes
+- **Room viewer** — visualize Plato room tiles and dependencies
+
+## Quick Start
 
 ```python
 # Load the extension
 %load_ext openconstruct_jupyter
 
-# Connect your notebook
+# Connect
 import openconstruct_jupyter as oc
 oc.connect(notebook=True)
 ```
 
-## Cell Magic
+### Cell Magic
 
 ```python
 %%openconstruct --sense vision
-# Cell output is captured as a vision shadow and auto-registered with the fleet
+# Cell output captured as a vision shadow
 
 %%openconstruct --tick "analysis complete"
 # Post a tick to the fleet
 
 %%openconstruct --room my-analysis
-# Create or load a Plato room from notebook context
-
-%%openconstruct --fleet
-# Show fleet discovery inline
+# Create or load a Plato room
 ```
 
-## Python API
+### Python API
 
 ```python
-import openconstruct_jupyter as oc
-
-oc.connect(notebook=True)
-
-# DataFrame → Plato room
 import pandas as pd
+
+# DataFrame → room
 df = pd.DataFrame({"x": [1, 2, 3], "y": [4, 5, 6]})
 oc.from_dataframe(df, name="my_data")
 
-# Python function → agent tool
+# Function → agent tool
 def greet(name):
     return f"Hello, {name}!"
-oc.from_function(greet, name="my_tool")
-
-# ML model → sense module
-# oc.from_model(model, name="my_model")
+oc.from_function(greet, name="greet_tool")
 
 # REST API → agent resource
-oc.from_api("https://api.example.com/data", name="my_api")
-
-# Publish the notebook's room with the fleet
-oc.publish_room()
+oc.from_api("https://api.example.com/data", name="external_data")
 ```
 
-## Example Notebooks
+## Installation
 
-| # | Notebook | Description |
-|---|----------|-------------|
-| 01 | [Quickstart](openconstruct_jupyter/examples/01-quickstart.ipynb) | Load, connect, and use in 5 minutes |
-| 02 | [Sense Modules](openconstruct_jupyter/examples/02-sense-modules.ipynb) | Build and register sense modules |
-| 03 | [Fleet Discovery](openconstruct_jupyter/examples/03-fleet-discovery.ipynb) | Explore fleet topology and health |
-| 04 | [Plato Rooms](openconstruct_jupyter/examples/04-plato-rooms.ipynb) | Create, populate, and share rooms |
-| 05 | [Custom Module](openconstruct_jupyter/examples/05-custom-module.ipynb) | Build a sense module from scratch |
+```bash
+pip install openconstruct-jupyter
+```
 
-## Integration with Existing Work
+## Testing
 
-openconstruct-jupyter is designed to slot into your existing Jupyter workflow:
-
-- **Variables** from notebook cells are automatically available as room tiles
-- **DataFrames** auto-convert to Plato room items with CR scores
-- **Plot outputs** auto-capture as vision shadows
-- **Import any Python library** and it becomes a sense module candidate
-- **IPython widgets** provide interactive dashboards for fleet status, rooms, and ticks
+```bash
+pytest tests/ -v
+```
 
 ## License
 
